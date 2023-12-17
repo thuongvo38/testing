@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,24 +56,33 @@ public class RegisterActivity extends AppCompatActivity {
         String str_repass = repass.getText().toString().trim();
         String str_mobile = mobile.getText().toString().trim();
         String str_username = username.getText().toString().trim();
-        if (TextUtils.isEmpty(str_email)) {
-            Toast.makeText(this, "Email cannot be empty", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(str_username)) {
-            Toast.makeText(this, "Please enter your username", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(str_pass)) {
-            Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(str_repass)) {
-            Toast.makeText(this, "Please enter your repassword", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(str_mobile)) {
-            Toast.makeText(this, "Please enter your phone num", Toast.LENGTH_SHORT).show();
+
+        // Email validation
+        if (TextUtils.isEmpty(str_email) || !Patterns.EMAIL_ADDRESS.matcher(str_email).matches() || !str_email.endsWith("@gmail.com")) {
+            Toast.makeText(this, "Enter a valid Gmail address", Toast.LENGTH_SHORT).show();
         }
-        // check password
+        // Username validation
+        else if (TextUtils.isEmpty(str_username) || !str_username.matches(".*[A-Z].*") || str_username.length() > 10) {
+            Toast.makeText(this, "Username must have a capital letter and not exceed 10 characters", Toast.LENGTH_SHORT).show();
+        }
+        // Password validation
+        else if (TextUtils.isEmpty(str_pass) || !str_pass.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")) {
+            Toast.makeText(this, "Password must be at least 8 characters long and include at least 1 uppercase letter, 1 lowercase letter, and 1 number", Toast.LENGTH_SHORT).show();
+        }
+        // Re-entered password validation
+        else if (TextUtils.isEmpty(str_repass) || !str_pass.equals(str_repass)) {
+            Toast.makeText(this, "Password re-entered does not match", Toast.LENGTH_SHORT).show();
+        }
+        // Mobile validation (assuming mobile should not be empty)
+        else if (TextUtils.isEmpty(str_mobile)) {
+            Toast.makeText(this, "Please enter your phone number", Toast.LENGTH_SHORT).show();
+        }
+        // All validations passed, proceed with registration
         else {
-            if (str_pass.equals(str_repass)) {
-                compositeDisposable.add(apiSale.register(str_email, str_pass, str_username, str_mobile)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
+            compositeDisposable.add(apiSale.register(str_email, str_pass, str_username, str_mobile)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
                             userModel -> {
                                 if(userModel.isSuccess()){
                                     Utils.user_current.setEmail(str_email);
@@ -84,10 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     Toast.makeText(this, userModel.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        ));
-            } else{
-            Toast.makeText(this, "Password re-entered does not match", Toast.LENGTH_SHORT).show();
-            }
+                    ));
         }
     }
 
