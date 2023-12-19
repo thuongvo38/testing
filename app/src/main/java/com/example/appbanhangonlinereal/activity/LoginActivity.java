@@ -52,17 +52,44 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String str_email = edtEmail.getText().toString().trim();
                 String str_pass = edtPassword.getText().toString().trim();
-                if (TextUtils.isEmpty(str_email)) { //chua nhap email
+
+                if(isValidLoginInput(str_email,str_pass)==0)
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter your email and pass", Toast.LENGTH_SHORT).show();
+                }
+               else if (isValidLoginInput(str_email,str_pass)==1) { //chua nhap email
                     Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(str_pass)) { //chua nhap pass
+                }
+
+               else if (isValidLoginInput(str_email,str_pass)==2) { //chua nhap pass
                     Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
-                }else{
+                }
+                else if (isValidLoginInput(str_email,str_pass)==21) { //Nhap pass sai kieu
+                    Toast.makeText(getApplicationContext(), "Invalid password", Toast.LENGTH_SHORT).show();
+                }
+               else{
                     //luu email va pass vao paper
                     Paper.book().write("email", str_email);
                     Paper.book().write("pass", str_pass);
                     login(str_email, str_pass);
                 }
             }
+
+
+//            public void onClick(View view) {
+//                String str_email = edtEmail.getText().toString().trim();
+//                String str_pass = edtPassword.getText().toString().trim();
+//                if (TextUtils.isEmpty(str_email)) { //chua nhap email
+//                    Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
+//                } else if (TextUtils.isEmpty(str_pass)) { //chua nhap pass
+//                    Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    //luu email va pass vao paper
+//                    Paper.book().write("email", str_email);
+//                    Paper.book().write("pass", str_pass);
+//                    login(str_email, str_pass);
+//                }
+//            }
         });
         loginAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +132,55 @@ public class LoginActivity extends AppCompatActivity {
                 )
         );
     }
+
+    public static int isValidLoginInput(String email, String pass)
+    {
+        // No input email va pass
+      if( email.length()==0 && pass.length()==0)
+          return 0;
+      // no input email
+      else if( email.length()==0)
+          return 1;
+      // no input password
+      else if(pass.length()==0)
+          return 2;
+      // invalid type input password
+      else if (!isValidPassLogin(pass))
+          return 21;
+      return 11;
+    }
+
+    public static boolean isValidPassLogin( String passwordhere)
+    {
+        // Check if the length is at least 8 characters
+        if (passwordhere.length() < 8) {
+            return false;
+        }
+
+        // Check if the password contains at least one letter
+        if (!passwordhere.matches(".*[a-zA-Z]+.*")) {
+            return false;
+        }
+
+        // Check if the password contains at least one digit
+        if (!passwordhere.matches(".*\\d+.*")) {
+            return false;
+        }
+
+        // Check if the password contains at least one capital letter
+        if (!passwordhere.matches(".*[A-Z]+.*")) {
+            return false;
+        }
+
+        // Check if the password contains at least one special symbol
+        if (!passwordhere.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]+.*")) {
+            return false;
+        }
+
+        // If all conditions are met, the password is valid
+        return true;
+    }
+
     //luu tai khoan mat khau, khong phai nhap lai khi login
     @Override
     protected void onResume() {

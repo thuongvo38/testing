@@ -9,6 +9,15 @@ public class GioHang {
 
     public GioHang(){}
 
+    public GioHang(int id,String itemA, long gia,String picture, int quantity) {
+        idsp=id;
+        tensp=itemA;
+        giasp=gia;
+        hinhsp=picture;
+        soluong=quantity;
+
+    }
+
     public int getIdsp() {
         return idsp;
     }

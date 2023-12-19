@@ -41,7 +41,20 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
         initView();
         initControl();
-        costOfCart(); //calculate cost of all product
+        if (Utils.manggiohang.size() == 0) {
+            txtEmpty.setVisibility(View.VISIBLE);
+        } else {
+            cartAdapter = new CartAdapter(getApplicationContext(), Utils.manggiohang);
+            recyclerView.setAdapter(cartAdapter);
+        }
+        btnBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentPay = new Intent(getApplicationContext(), PaymentActivity.class);
+                intentPay.putExtra("cost", calculateTotalCost(Utils.manggiohang));
+                startActivity(intentPay);
+            }
+        });
     }
 
     private void costOfCart() {
@@ -105,5 +118,12 @@ public class CartActivity extends AppCompatActivity {
         if(event != null){
             costOfCart();
         }
+    }
+    public static long calculateTotalCost(List<GioHang> gioHangList) {
+        long totalCost = 0;
+        for (int i = 0; i < gioHangList.size(); i++) {
+            totalCost += (gioHangList.get(i).getGiasp() * gioHangList.get(i).getSoluong());
+        }
+        return totalCost;
     }
 }
