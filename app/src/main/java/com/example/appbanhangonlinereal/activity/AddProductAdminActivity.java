@@ -142,7 +142,19 @@ public class AddProductAdminActivity extends AppCompatActivity {
         String str_price = binding.addPriceProduct.getText().toString().trim();
         String str_describe = binding.addDescribeProduct.getText().toString().trim();
         String str_image = binding.addProductImage.getText().toString().trim();
-        if(TextUtils.isEmpty(str_name) ||TextUtils.isEmpty(str_price) ||TextUtils.isEmpty(str_describe) ||TextUtils.isEmpty(str_image) || loaiSp == 0){
+        if(isValidInsert(str_name,str_price,str_describe)=="Invalid name product")
+        {
+            Toast.makeText(getApplicationContext(), "Name product is not empty, starts with a digit, or contains special characters", Toast.LENGTH_SHORT).show();
+        }
+        else if(isValidInsert(str_name,str_price,str_describe)=="Invalid price product")
+        {
+            Toast.makeText(getApplicationContext(), " Price is not empty or less than 1000", Toast.LENGTH_SHORT).show();
+        }
+        else if(isValidInsert(str_name,str_price,str_describe)=="Invalid describe product")
+        {
+            Toast.makeText(getApplicationContext(), " Describe should not be empty", Toast.LENGTH_SHORT).show();
+        }
+        else  if(TextUtils.isEmpty(str_name) ||TextUtils.isEmpty(str_price) ||TextUtils.isEmpty(str_describe) ||TextUtils.isEmpty(str_image) || loaiSp == 0){
             Toast.makeText(getApplicationContext(), "Please enter all information", Toast.LENGTH_SHORT).show();
         }else {
             compositeDisposable.add(apiSale.update(updateProduct.getId(),str_name, str_price, str_image, str_describe, loaiSp)
@@ -182,9 +194,24 @@ public class AddProductAdminActivity extends AppCompatActivity {
         String str_price = binding.addPriceProduct.getText().toString().trim();
         String str_describe = binding.addDescribeProduct.getText().toString().trim();
         String str_image = binding.addProductImage.getText().toString().trim();
-        if(TextUtils.isEmpty(str_name) ||TextUtils.isEmpty(str_price) ||TextUtils.isEmpty(str_describe) ||TextUtils.isEmpty(str_image) || loaiSp == 0){
+
+
+        if(isValidInsert(str_name,str_price,str_describe)=="Invalid name product")
+        {
+            Toast.makeText(getApplicationContext(), "Name product is not empty, starts with a digit, or contains special characters", Toast.LENGTH_SHORT).show();
+        }
+        else if(isValidInsert(str_name,str_price,str_describe)=="Invalid price product")
+        {
+            Toast.makeText(getApplicationContext(), " Price is not empty or less than 1000", Toast.LENGTH_SHORT).show();
+        }
+        else if(isValidInsert(str_name,str_price,str_describe)=="Invalid describe product")
+        {
+            Toast.makeText(getApplicationContext(), " Describe should not be empty", Toast.LENGTH_SHORT).show();
+        }
+        else  if(TextUtils.isEmpty(str_name) ||TextUtils.isEmpty(str_price) ||TextUtils.isEmpty(str_describe) ||TextUtils.isEmpty(str_image) || loaiSp == 0){
             Toast.makeText(getApplicationContext(), "Please enter all information", Toast.LENGTH_SHORT).show();
-        }else {
+        }
+        else {
             compositeDisposable.add(apiSale.insertProduct(str_name, str_price, str_image, str_describe, loaiSp)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -253,5 +280,27 @@ public class AddProductAdminActivity extends AppCompatActivity {
     protected void onDestroy() {
         compositeDisposable.clear();
         super.onDestroy();
+    }
+
+
+    public static String isValidInsert(String name, String price, String describe) {
+        // Validate name
+        if (name.length()==0) {
+            return "Invalid name product";  // Name is empty
+        } else if (Character.isDigit(name.charAt(0)) || !name.matches("[a-zA-Z0-9 ]+")) {
+            return "Invalid name product";  // Name starts with a digit or contains special characters
+        }
+
+        // Validate price
+        else if (price.length()==0 || Double.parseDouble(price) < 1000) {
+            return "Invalid price product";  // Price is empty or less than 1000
+        }
+
+        // Validate describe
+        else if (describe.length()==0) {
+            return "Invalid describe product";  // Describe is empty
+        }
+
+        return "Valid";  // All inputs are valid
     }
 }
