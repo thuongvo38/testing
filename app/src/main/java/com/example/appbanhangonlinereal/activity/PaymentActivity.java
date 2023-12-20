@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,17 +15,17 @@ import android.widget.Toast;
 import com.example.appbanhangonlinereal.R;
 import com.example.appbanhangonlinereal.Retrofit.ApiSale;
 import com.example.appbanhangonlinereal.Retrofit.RetrofitClient;
+import com.example.appbanhangonlinereal.model.GioHang;
 import com.example.appbanhangonlinereal.utils.Utils;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 public class PaymentActivity extends AppCompatActivity {
     AppCompatButton btnPay;
@@ -42,18 +41,19 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         initView();
-        countItem();
-        initControl();
+        int itemCount = countItem(Utils.manggiohang);
+        initControl(itemCount);
     }
     //Đếm số lượng sản phẩm trong đơn hàng
-    private void countItem() {
-        totalItem = 0;
-        for(int i = 0; i < Utils.manggiohang.size(); i++){
-            totalItem += Utils.manggiohang.get(i).getSoluong();
+    protected static int countItem(List<GioHang> gioHangList) {
+        int totalItem = 0;
+        for (GioHang gioHang : gioHangList) {
+            totalItem += gioHang.getSoluong();
         }
+        return totalItem;
     }
 
-    private void initControl() {
+    private void initControl(int itemCount) {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -75,25 +75,25 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String str_address = address.getText().toString().trim();
-                if(TextUtils.isEmpty(str_address)){
+                if (TextUtils.isEmpty(str_address)) {
                     Toast.makeText(PaymentActivity.this, "Address can't be empty", Toast.LENGTH_SHORT).show();
-                }else{
-                    //post data
+                } else {
+                    // post data
                     String str_email = Utils.user_current.getEmail();
                     String str_phone = Utils.user_current.getMobile();
                     int id = Utils.user_current.getId();
-//                    Log.d("test", new Gson().toJson(Utils.manggiohang));
-                    compositeDisposable.add(apiSale.createOrder(str_email, str_phone, String.valueOf(totalCost),id,str_address, totalItem, new Gson().toJson(Utils.manggiohang))
+
+                    compositeDisposable.add(apiSale.createOrder(str_email, str_phone, String.valueOf(totalCost), id, str_address, itemCount, new Gson().toJson(Utils.manggiohang))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     userModel -> {
-                                        if(userModel.isSuccess()){
+                                        if (userModel.isSuccess()) {
                                             Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                             startActivity(intent);
                                             finish();
-                                            Utils.manggiohang.clear(); //xóa sản phẩm trong giỏ khi đặt hàng thành công
+                                            Utils.manggiohang.clear(); // xóa sản phẩm trong giỏ khi đặt hàng thành công
                                         }
                                     },
                                     throwable -> {

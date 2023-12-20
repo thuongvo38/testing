@@ -52,10 +52,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void register() {
         String str_email = email.getText().toString().trim();
+        String str_username = username.getText().toString().trim();
         String str_pass = password.getText().toString().trim();
         String str_repass = repass.getText().toString().trim();
         String str_mobile = mobile.getText().toString().trim();
-        String str_username = username.getText().toString().trim();
+
 
 
 //        if ( str_username.length()==0 ||str_email.length()==0 || str_pass.length()==0 ||str_repass.length()==0 ||str_mobile.length()==0)
@@ -106,11 +107,11 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter a valid Gmail address", Toast.LENGTH_SHORT).show();
         }
         // Username validation
-        else if (isValidUser(str_username) == false) {
+        else if (!isValidUser(str_username)|| str_username.length()==0 ) {
             Toast.makeText(this, "Username must not be more than 12 characters,not begin with a number or special character and no blanks inside", Toast.LENGTH_SHORT).show();
         }
         // Password validation
-        else if (!isValidPass(str_pass)) {
+        else if (!isValidPass(str_pass) ) {
             Toast.makeText(this, "Password must contain at least 8 charaters,having letter,digit,at least 1 capital letter and special symbol", Toast.LENGTH_SHORT).show();
         }
         // Re-entered password validation
@@ -132,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     Utils.user_current.setEmail(str_email);
                                     Utils.user_current.setPass(str_pass);
                                     Intent intent_register = new Intent(getApplicationContext(), LoginActivity.class);
+                                    Toast.makeText(this, "Regist successfully !", Toast.LENGTH_SHORT).show();
                                     startActivity(intent_register);
                                     finish();
                                 }else {
@@ -174,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
         // If all conditions are met, the username is valid
         return true;
     }
-    public static boolean isValidPass( String passwordhere)
+    protected static boolean isValidPass( String passwordhere)
     {
         // Check if the length is at least 8 characters
         if (passwordhere.length() < 8) {
