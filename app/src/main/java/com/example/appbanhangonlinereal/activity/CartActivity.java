@@ -119,6 +119,9 @@ public class CartActivity extends AppCompatActivity {
             costOfCart();
         }
     }
+
+    ///----------------------------------------PART WE TESTING-----------------------------------------
+
     public static long calculateTotalCost(List<GioHang> gioHangList) {
         long totalCost = 0;
         for (int i = 0; i < gioHangList.size(); i++) {
@@ -127,3 +130,5 @@ public class CartActivity extends AppCompatActivity {
         return totalCost;
     }
 }
+
+//-----------------------------------------------END------------------------------------------------------------------

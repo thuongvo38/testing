@@ -101,9 +101,11 @@ public class RegisterActivity extends AppCompatActivity {
 //
 
 
+///----------------------------------------PART WE TESTING-----------------------------------------
 
         // Email validation
         if (str_email.length()==0 || !Patterns.EMAIL_ADDRESS.matcher(str_email).matches() || !str_email.endsWith("@gmail.com")) {
+            //Màn hình sẽ hiện thị
             Toast.makeText(this, "Enter a valid Gmail address", Toast.LENGTH_SHORT).show();
         }
         // Username validation
@@ -119,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Password re-entered does not match", Toast.LENGTH_SHORT).show();
         }
         // Mobile validation (assuming mobile should not be empty)
-        else if (isValidPhone(str_mobile)== false) {
+        else if (isValidPhone(str_mobile) == false) {
             Toast.makeText(this, "Please enter valid phone number", Toast.LENGTH_SHORT).show();
         }
         // All validations passed, proceed with registration
@@ -144,6 +146,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    //-----------------------------------------------END------------------------------------------------------------------
+
     private void initView() {
         apiSale = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiSale.class);
         txt_login = findViewById(R.id.txt_login);
@@ -154,6 +158,10 @@ public class RegisterActivity extends AppCompatActivity {
         username = findViewById(R.id.register_username);
         btnRegister = findViewById(R.id.btnRegister);
     }
+
+
+
+    ///----------------------------------------FUNCTON WE TESTING-----------------------------------------
 
     public static boolean isValidUser(String userhere)
     {
@@ -208,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     public static boolean isValidPhone (String phone ){
         // Check if the phone number is not empty
-        if (TextUtils.isEmpty(phone)) {
+        if (phone.length()==0) {
             return false;
         }
 
@@ -235,6 +243,9 @@ public class RegisterActivity extends AppCompatActivity {
         // If all conditions are met, the phone number is valid
         return true;
     }
+
+    //-----------------------------------------------END------------------------------------------------------------------
+
 
 
     @Override

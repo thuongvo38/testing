@@ -47,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intentRegister);
             }
         });
+
+        ///----------------------------------------PART WE TESTING-----------------------------------------
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
                     login(str_email, str_pass);
                 }
             }
+            //-----------------------------------------------END------------------------------------------------------------------
+
 
 
 //            public void onClick(View view) {

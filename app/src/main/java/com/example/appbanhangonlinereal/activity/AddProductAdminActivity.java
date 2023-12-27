@@ -189,6 +189,8 @@ public class AddProductAdminActivity extends AppCompatActivity {
         }
         return result;
     }
+
+    ///----------------------------------------PART WE TESTING-----------------------------------------
     private void insertProduct() {
         String str_name = binding.addProductName.getText().toString().trim();
         String str_price = binding.addPriceProduct.getText().toString().trim();
@@ -228,6 +230,10 @@ public class AddProductAdminActivity extends AppCompatActivity {
                     ));
         }
     }
+
+    //-----------------------------------------------END------------------------------------------------------------------
+
+
     //Test log ảnh
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -282,12 +288,12 @@ public class AddProductAdminActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
+    ///----------------------------------------PART WE TESTING-----------------------------------------
     public static String isValidInsert(String name, String price, String describe) {
         // Validate name
         if (name.length()==0) {
             return "Invalid name product";  // Name is empty
-        } else if (Character.isDigit(name.charAt(0)) || !name.matches("[a-zA-Z0-9 ]+")) {
+        } else if (Character.isDigit(name.charAt(0)) || !name.matches("[\\p{L}0-9 ]+")) {
             return "Invalid name product";  // Name starts with a digit or contains special characters
         }
 
@@ -304,3 +310,5 @@ public class AddProductAdminActivity extends AppCompatActivity {
         return "Valid";  // All inputs are valid
     }
 }
+
+//-----------------------------------------------END------------------------------------------------------------------

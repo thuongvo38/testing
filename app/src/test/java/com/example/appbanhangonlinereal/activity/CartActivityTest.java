@@ -46,7 +46,7 @@ public class CartActivityTest {
     @Test
     public void testCalculateTotalCost_ItemListWithNegativeQuantity() {
         List<GioHang> itemList = new ArrayList<>();
-        itemList.add(new GioHang(1010,"Item A", 10, "trang",-2));
+        itemList.add(new GioHang(1010,"Item A", 10, "trang.png",-2));
         itemList.add(new GioHang(1011,"Item B", 15,"trang", -3));
         long result = CartActivity.calculateTotalCost(itemList);
         assertEquals(-65, result);

@@ -44,6 +44,9 @@ public class PaymentActivity extends AppCompatActivity {
         int itemCount = countItem(Utils.manggiohang);
         initControl(itemCount);
     }
+
+    ///----------------------------------------PART WE TESTING-----------------------------------------
+
     //Đếm số lượng sản phẩm trong đơn hàng
     protected static int countItem(List<GioHang> gioHangList) {
         int totalItem = 0;
@@ -52,6 +55,7 @@ public class PaymentActivity extends AppCompatActivity {
         }
         return totalItem;
     }
+    //-----------------------------------------------END------------------------------------------------------------------
 
     private void initControl(int itemCount) {
         setSupportActionBar(toolbar);
